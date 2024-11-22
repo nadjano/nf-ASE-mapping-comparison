@@ -41,6 +41,7 @@ process MINIMAP2 {
         for ref in $hap_refs_str
         do
             module load minimap2
+            # module load minimap2/2.24
             minimap2 \
                         -t ${task.cpus} \
                         -c \

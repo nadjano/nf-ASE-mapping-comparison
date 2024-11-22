@@ -7,7 +7,7 @@ work
 hap_genomes
 fastq_reads
 .nextflow
-out_ms
+out_ms*
 *pdf
 *tsv
 *csv

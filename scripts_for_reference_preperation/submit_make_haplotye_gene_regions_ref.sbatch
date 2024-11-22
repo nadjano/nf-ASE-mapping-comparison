@@ -3,19 +3,19 @@
 #SBATCH --mail-type=FAIL
 #SBATCH --job-name=syntelogs_class
 #SBATCH --output=syntelogs.out
-#SBATCH --error=/syntelogs.err
+#SBATCH --error=syntelogs.err
 #SBATCH --cpus-per-task=1
 #SBATCH --time=24:00:00
 #SBATCH --ntasks=1
 #SBATCH --mem=50gb
 
-module load python/3.11
+module load python/3.10
 module load samtools/1.19
 module load gffread/0.12.7 
 
 ### Set Directories
-PROJ="directory of current project"
-SCRIPTS=$PROJ/scripts/construct_haplotype_generegions_and_compare
+PROJ=/blue/mcintyre/share/potato_ASE
+SCRIPTS=$PROJ/nf-ASE-mapping-comparison/scripts_for_reference_preperation
 OUTD=$PROJ/transcripts_classification
 ROZ=$OUTD/roz
 REF_DIR=$PROJ/spuddb_reference_data
@@ -63,4 +63,15 @@ done
 grep "Soltu.Atl_v3.S" -A1 $REF_DIR/ATL_v3.hc_gene_models_only_mRNA_syntIDs.repr_one_line_allhap.fa >> $REF_DIR/ATL_v3.hc_gene_models_only_mRNA_syntIDs.repr_one_line_hap1.fa
 
 # copy to hap_genomes dir for nf-ASE-mapping-comparison
-cp $REF_DIR/ATL_v3.hc_gene_models_only_mRNA_syntIDs.repr_one_line_*.fa $REF_DIR/hap_genomes
+cp $REF_DIR/ATL_v3.hc_gene_models_only_mRNA_syntIDs.repr_one_line_*.fa $PROJ/nf-ASE-mapping-comparison/hap_genomes
+
+
+
+
+
+# Download the fastq reads 
+module load sra
+fastq-dump --outdir $PROJ/nf-ASE-mapping-comparison/fastq_reads  SRR14993893
+fastq-dump --outdir $PROJ/nf-ASE-mapping-comparison/fastq_reads  SRR14993892
+fastq-dump --outdir $PROJ/nf-ASE-mapping-comparison/fastq_reads  SRR14993894
+fastq-dump --outdir $PROJ/nf-ASE-mapping-comparison/fastq_reads  SRR14993895
