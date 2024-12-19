@@ -149,7 +149,7 @@ workflow {
     // plot mapping strategy comparison
     PLOT(minimap_out_grouped)
     // plot mapq filter comparison
-    PLOT_MAPQ_FILTER(minimap_out_grouped)
+    //PLOT_MAPQ_FILTER(minimap_out_grouped)
     // plot barplot for ASE count distribution
     BARPLOT(minimap_out_grouped)
 

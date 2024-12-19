@@ -28,7 +28,6 @@ process PLOT {
     --output_prefix ${experiment}_${mm_parameters}
 
     mkdir -p ${experiment}_${mm_parameters}_tsv 
-    mv *.tsv ${experiment}_${mm_parameters}_tsv 
-    echo "Hello"
+    mv *.tsv ${experiment}_${mm_parameters}_tsv
     """
 }

@@ -197,6 +197,8 @@ def get_mapping_cat_per_gene(df):
 def get_read_with_different_mappings(dataframes, output_prefix):
     merged = pd.merge(dataframes[0], dataframes[1], on='read_id', suffixes=('_seperate', '_competetive'))
     print(merged)
+
+    create_mapping_heatmaps(merged, output_prefix)
  
     # print the rows where the count is different
     diffrent_count = merged[merged['mapping_location_seperate'] != merged['mapping_location_competetive']]
@@ -208,7 +210,9 @@ def get_read_with_different_mappings(dataframes, output_prefix):
 
     # save to file
     diff_group.to_csv(f'{output_prefix}_grouped_categories.tsv', sep='\t', index=False)
+    merged.to_csv(f'{output_prefix}_allreads_merged.tsv', sep='\t', index=True)
     return diffrent_count
+
 
 def create_scatter_plot(df, output_prefix):
     # Create a color dictionary to map each unique mapping category to a color
@@ -283,6 +287,57 @@ def create_scatter_plot(df, output_prefix):
     fig = scatterplot.get_figure()
     fig.tight_layout()
     fig.savefig(f"all_{output_prefix}_scatter_plot.pdf", dpi=300, bbox_inches='tight', transparent=True)
+
+def create_mapping_heatmaps(df, output_prefix):
+
+    # change the mapping category unique_nan to unique_scaffold
+    df['mapping_category_seperate'] = df['mapping_category_seperate'].replace({'unique_nan': 'unique_scaffold'})
+    df['mapping_category_competetive'] = df['mapping_category_competetive'].replace({'unique_nan': 'unique_scaffold'})
+
+    # Separate correct and incorrect mappings
+    data_incorrect = df[df['mapping_location_seperate'] != df['mapping_location_competetive']]
+    data_correct = df[df['mapping_location_seperate'] == df['mapping_location_competetive']]
+
+    print(data_correct)
+
+    # Group and pivot to get count matrices
+    # heatmap_data_correct = data_correct.groupby(
+    #     ['mapping_category_competetive', 'mapping_category_seperate']
+    # ).size().unstack(fill_value=0)
+
+    heatmap_data_incorrect = data_incorrect.groupby(
+        ['mapping_category_competetive', 'mapping_category_seperate']
+    ).size().unstack(fill_value=0)
+
+    # Create subplots
+    fig, ax = plt.subplots(1, 2, figsize=(15, 7))
+
+    # Heatmap for correct mappings
+    sns.countplot(data_correct, x= "mapping_category_competetive", ax=ax[0], orient = "v")
+    # ax[0].set_title('Identical mapping location per read')
+    ax[0].set_xlabel('Mapping category')
+    ax[0].set_ylabel('Read count')
+    # trun the x axis labels
+    ax[0].set_xticklabels(ax[0].get_xticklabels(), rotation=90, horizontalalignment='right')
+
+    # Heatmap for incorrect mappings
+    sns.heatmap(heatmap_data_incorrect, annot=True, fmt='d', ax=ax[1], cmap='Reds')
+    # ax[1].set_title('Different mapping location per read')
+    ax[1].set_xlabel('Mapping category (separate)')
+    ax[1].set_ylabel('Mapping category (competitive)')
+
+    plt.tight_layout()
+    
+    # Save the figure
+    output_file = f"{output_prefix}_mapping_heatmaps.pdf"
+    plt.savefig(output_file, dpi=300, bbox_inches='tight', transparent=True)
+    plt.close(fig)
+
+    # Optionally, print results to inspect the group counts
+    # print("\n--- Heatmap Data (Correct) ---")
+    # print(heatmap_data_correct)
+    # print("\n--- Heatmap Data (Incorrect) ---")
+    # print(heatmap_data_incorrect)
 
 def filter_mapq(df):
     # Filter the DataFrame on mapq == 0
