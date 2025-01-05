@@ -312,11 +312,15 @@ def create_mapping_heatmaps(df, output_prefix):
     # Create subplots
     fig, ax = plt.subplots(1, 2, figsize=(15, 7))
 
+    # make sure that the x axis labels are sorted alphabetically
+    data_correct['mapping_category_competetive'] = pd.Categorical(data_correct['mapping_category_competetive'], categories=data_correct['mapping_category_competetive'].unique(), ordered=True)
+    data_correct = data_correct.sort_values('mapping_category_competetive')
+  
     # Heatmap for correct mappings
-    sns.countplot(data_correct, x= "mapping_category_competetive", ax=ax[0], orient = "v")
+    sns.countplot(data_correct, x= "mapping_category_competetive", ax=ax[0], orient = "v", stat = "percent")
     # ax[0].set_title('Identical mapping location per read')
     ax[0].set_xlabel('Mapping category')
-    ax[0].set_ylabel('Read count')
+    ax[0].set_ylabel("% of mapped reads")
     # trun the x axis labels
     ax[0].set_xticklabels(ax[0].get_xticklabels(), rotation=90, horizontalalignment='right')
 

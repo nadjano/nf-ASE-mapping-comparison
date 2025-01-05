@@ -2,15 +2,15 @@
 #SBATCH --mail-user=
 #SBATCH --mail-type=FAIL
 #SBATCH --job-name=syntelogs_class
-#SBATCH --output=/blue/mcintyre/share/potato_ASE/orang_utan.out
-#SBATCH --error=/blue/mcintyre/share/potato_ASE/orang_utan.err
+#SBATCH --output=orang_utan.out
+#SBATCH --error=orang_utan.err
 #SBATCH --cpus-per-task=1
 #SBATCH --time=24:00:00
 #SBATCH --ntasks=1
 #SBATCH --mem=50gb
 
 
-PROJ=/blue/mcintyre/share/potato_ASE
+PROJ=dir
 
 module load sra
 module load gffread

@@ -14,7 +14,7 @@ module load samtools/1.19
 module load gffread/0.12.7 
 
 ### Set Directories
-PROJ=/blue/mcintyre/share/potato_ASE
+PROJ=dir
 SCRIPTS=$PROJ/nf-ASE-mapping-comparison/scripts_for_reference_preperation
 OUTD=$PROJ/transcripts_classification
 ROZ=$OUTD/roz
