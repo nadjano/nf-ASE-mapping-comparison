@@ -1,4 +1,4 @@
-## Long-read RNA-seq Mapping Strategies for Haplotype-Resolved Genomes
+# Long-read RNA-seq Mapping Strategies for Allele-specific Expression Analysis Using Haplotype-Resolved Genomes
 This repository contains the scripts to run the analyis from the paper [*The promise of long-read RNA-seq: reducing bias in analyses of allele imbalance*](https://doi.org/10.1101/2025.10.14.682301).
 
 Prequesites:
